@@ -1,65 +1,64 @@
-import Image from "next/image";
+import { siteConfig } from "@/lib/site";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
+    <div className="space-y-14">
+      <section className="rounded-3xl border border-neutral-200 bg-white p-8 md:p-12">
+        <p className="text-sm text-neutral-600">
+          {siteConfig.area}｜���全予約制
+        </p>
+        <h1 className="mt-3 text-2xl font-semibold leading-tight md:text-4xl">
+          住宅地にひっそり。
+          <br className="hidden md:block" />
+          ネイルも肌も体も整う、隠れ家トータルサロン
+        </h1>
+        <p className="mt-4 max-w-2xl text-sm leading-7 text-neutral-700 md:text-base">
+          ジェルネイル（ハンド・フット）／毛穴洗浄／ハーブピーリング／たるみケア／
+          よもぎ蒸し／脱毛／痩身／耳ツボまで。目的に合わせて、無理のないメニューをご提案します。
+        </p>
+
+        <div className="mt-6 flex flex-col gap-3 sm:flex-row">
           <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+            href={siteConfig.reservationUrl}
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noreferrer"
+            className="inline-flex items-center justify-center rounded-full bg-neutral-900 px-6 py-3 text-sm font-medium text-white hover:bg-neutral-800"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
+            ホットペッパーで予約する
           </a>
           <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/menu"
+            className="inline-flex items-center justify-center rounded-full border border-neutral-300 bg-white px-6 py-3 text-sm font-medium text-neutral-900 hover:bg-neutral-50"
           >
-            Documentation
+            メニューを見る
           </a>
         </div>
-      </main>
+      </section>
+
+      <section className="grid gap-4 md:grid-cols-3">
+        {[
+          {
+            title: "落ち着ける空間",
+            desc: "完全予約制のプライベート空間で、周りを気にせずリラックス。",
+          },
+          {
+            title: "トータルで提案",
+            desc: "ネイル×フェイシャル×ボディを目的に合わせて組み合わせ。",
+          },
+          {
+            title: "守口・大日エリア",
+            desc: "大日駅から少し離れた住宅地。詳細はご予約確定後のご案内も可能。",
+          },
+        ].map((x) => (
+          <div
+            key={x.title}
+            className="rounded-2xl border border-neutral-200 bg-white p-6"
+          >
+            <p className="text-sm font-semibold text-neutral-900">{x.title}</p>
+            <p className="mt-2 text-sm leading-7 text-neutral-700">{x.desc}</p>
+          </div>
+        ))}
+      </section>
     </div>
   );
 }
