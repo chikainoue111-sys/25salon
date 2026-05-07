@@ -1,4 +1,6 @@
+// （ファイル全部貼るけど、変更多いのは src だけ）
 import Link from "next/link";
+import Image from "next/image";
 import { siteConfig } from "@/lib/site";
 
 const navItems = [
@@ -10,15 +12,23 @@ const navItems = [
 
 export default function Header() {
   return (
-    <header className="sticky top-0 z-50 border-b border-neutral-200/80 bg-white/80 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-neutral-200/70 bg-white/70 backdrop-blur">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-3">
-        <Link href="/" className="flex items-baseline gap-2">
-          <span className="text-sm font-semibold tracking-wide text-neutral-900">
-            {siteConfig.name}
-          </span>
-          <span className="hidden text-xs text-neutral-500 sm:inline">
-            {siteConfig.area}
-          </span>
+        <Link href="/" className="flex items-center gap-3">
+          <Image
+            src="/logo.JPG"
+            alt={`${siteConfig.name} ロゴ`}
+            width={44}
+            height={44}
+            className="h-11 w-11 rounded-full border border-neutral-200 bg-white object-contain"
+            priority
+          />
+          <div className="leading-tight">
+            <p className="text-sm font-semibold tracking-wide text-neutral-900">
+              {siteConfig.name}
+            </p>
+            <p className="text-xs text-neutral-500">{siteConfig.area}</p>
+          </div>
         </Link>
 
         <nav className="hidden items-center gap-5 text-sm text-neutral-700 md:flex">
@@ -43,8 +53,7 @@ export default function Header() {
         </a>
       </div>
 
-      {/* モバイル用ナビ（シンプル版） */}
-      <div className="border-t border-neutral-200/60 bg-white/70 md:hidden">
+      <div className="border-t border-neutral-200/60 bg-white/60 md:hidden">
         <div className="mx-auto grid max-w-6xl grid-cols-4 px-2 text-xs text-neutral-700">
           {navItems.map((item) => (
             <Link
