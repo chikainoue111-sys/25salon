@@ -36,9 +36,9 @@ export default function RootLayout({
         className={`${sans.variable} ${serif.variable} min-h-screen bg-neutral-50 text-neutral-900`}
       >
         <Header />
-        <main className="mx-auto w-full max-w-6xl px-4 py-10 pb-16 md:pb-10">
-          {children}
-        </main>
+        <main className="mx-auto w-full max-w-6xl px-4 py-10 pb-24 md:pb-10">
+  {children}
+</main>
         <Footer />
         <MobileReservationBar />
       </body>

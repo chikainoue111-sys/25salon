@@ -2,36 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ===== base theme ===== */
 :root {
-  --brand-accent: 200 185 166;
+  --brand-accent: 200 185 166; /* ロゴのゴールド寄り */
 }
 
 body {
-  font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system,
-    "Segoe UI", sans-serif;
-}
-
-h1,
-h2,
-h3,
-.section-title {
-  font-family: var(--font-serif), ui-serif, Georgia, "Times New Roman", serif;
-  letter-spacing: 0.02em;
-}
-
-/* 大理石画像なし：グラデ/ニュアンスだけで石っぽく */
-body {
-  background-color: #f7f7f7;
-  background-image:
-    radial-gradient(1200px 600px at 10% 10%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0)),
-    radial-gradient(900px 500px at 90% 20%, rgba(235, 232, 228, 0.75), rgba(255, 255, 255, 0)),
-    radial-gradient(900px 600px at 30% 90%, rgba(228, 228, 228, 0.8), rgba(255, 255, 255, 0));
-  background-size: cover;
+  background:
+    radial-gradient(1200px 700px at 0% 0%, rgba(255,255,255,.95), rgba(255,255,255,0)),
+    radial-gradient(900px 600px at 100% 10%, rgba(232,228,222,.85), rgba(255,255,255,0)),
+    radial-gradient(800px 700px at 30% 100%, rgba(226,226,226,.85), rgba(255,255,255,0)),
+    linear-gradient(180deg, #f7f7f7, #f3f2f1);
   background-attachment: fixed;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  body {
-    background-attachment: scroll;
-  }
+/* 青リンク化を防いでサイトのトーンを統一 */
+a {
+  color: inherit;
 }

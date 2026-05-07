@@ -5,7 +5,7 @@ export default function HomePage() {
     <div className="space-y-14">
       <section className="rounded-3xl border border-neutral-200 bg-white p-8 md:p-12">
         <p className="text-sm text-neutral-600">
-          {siteConfig.area}｜���全予約制
+          {siteConfig.area}｜完全予約制
         </p>
         <h1 className="mt-3 text-2xl font-semibold leading-tight md:text-4xl">
           住宅地にひっそり。
