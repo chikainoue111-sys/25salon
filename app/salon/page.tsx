@@ -1,19 +1,32 @@
+import { GlassCard, PageHeader } from "@/components/ui";
+
 export default function SalonPage() {
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-semibold md:text-3xl">サロン紹介</h1>
-      <p className="text-sm leading-7 text-neutral-700 md:text-base">
-        大阪府守口市・大日エリアの住宅地にある隠れ家トータルサロンです。
-        年齢やお悩みに合わせて、ネイル・肌・体のケアを丁寧にご提案します。
-      </p>
+    <div className="space-y-8">
+      <PageHeader
+        eyebrow="About"
+        title="サロン紹介"
+        description="大阪府守口市・大日エリアの住宅地にある隠れ家トータルサロン。年齢やお悩みに合わせて、ネイル・肌・体のケアを丁寧にご提案します。"
+      />
 
-      <div className="rounded-2xl border border-neutral-200 bg-white p-6">
-        <h2 className="text-lg font-semibold">サロンの特徴</h2>
-        <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-7 text-neutral-700">
-          <li>完全予約制で落ち着いて通える</li>
-          <li>ネイル／フェイシャル／ボディまで一箇所でケア</li>
-          <li>お悩みや目的に合わせてメニューをご提案</li>
-        </ul>
+      <div className="grid gap-4 md:grid-cols-2">
+        <GlassCard className="p-6">
+          <h2 className="section-title text-lg font-semibold">特徴</h2>
+          <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-7 text-neutral-700">
+            <li>完全予約制で落ち着いて通える</li>
+            <li>ネイル／フェイシャル／ボディまで一箇所でケア</li>
+            <li>目的に合わせてメニューをご提案</li>
+          </ul>
+        </GlassCard>
+
+        <GlassCard className="p-6">
+          <h2 className="section-title text-lg font-semibold">お願い</h2>
+          <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-7 text-neutral-700">
+            <li>当日は時間に余裕をもってご来店ください</li>
+            <li>遅刻・キャンセルは早めにご連絡ください</li>
+            <li>住所詳細はご予約確定後のご案内も可能です</li>
+          </ul>
+        </GlassCard>
       </div>
     </div>
   );

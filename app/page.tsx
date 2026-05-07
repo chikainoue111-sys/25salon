@@ -1,64 +1,69 @@
 import { siteConfig } from "@/lib/site";
+import { GlassCard, PageHeader, PrimaryButton, SecondaryButton } from "@/components/ui";
 
 export default function HomePage() {
   return (
-    <div className="space-y-14">
-      <section className="rounded-3xl border border-neutral-200 bg-white p-8 md:p-12">
-        <p className="text-sm text-neutral-600">
-          {siteConfig.area}｜完全予約制
-        </p>
-        <h1 className="mt-3 text-2xl font-semibold leading-tight md:text-4xl">
-          住宅地にひっそり。
-          <br className="hidden md:block" />
-          ネイルも肌も体も整う、隠れ家トータルサロン
-        </h1>
-        <p className="mt-4 max-w-2xl text-sm leading-7 text-neutral-700 md:text-base">
-          ジェルネイル（ハンド・フット）／毛穴洗浄／ハーブピーリング／たるみケア／
-          よもぎ蒸し／脱毛／痩身／耳ツボまで。目的に合わせて、無理のないメニューをご提案します。
-        </p>
+    <div className="space-y-10 md:space-y-14">
+      <GlassCard className="p-7 md:p-12">
+        <PageHeader
+          eyebrow={`${siteConfig.area}｜完全予約制`}
+          title="ネイルも肌も体も。静かに整う、隠れ家トータルサロン"
+          description="ジェルネイル（ハンド・フット）／毛穴洗浄／ハーブピーリング／たるみケア／よもぎ蒸し／脱毛／痩身／耳ツボまで。目的や悩みに合わせて、無理のないメニューをご提案します。"
+          actions={
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <PrimaryButton href={siteConfig.reservationUrl}>
+                ホットペッパーで予約する
+              </PrimaryButton>
+              <SecondaryButton href="/menu">メニューを見る</SecondaryButton>
+            </div>
+          }
+        />
+      </GlassCard>
 
-        <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-          <a
-            href={siteConfig.reservationUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center justify-center rounded-full bg-neutral-900 px-6 py-3 text-sm font-medium text-white hover:bg-neutral-800"
-          >
-            ホットペッパーで予約する
-          </a>
-          <a
-            href="/menu"
-            className="inline-flex items-center justify-center rounded-full border border-neutral-300 bg-white px-6 py-3 text-sm font-medium text-neutral-900 hover:bg-neutral-50"
-          >
-            メニューを見る
-          </a>
-        </div>
-      </section>
-
-      <section className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-3">
         {[
           {
-            title: "落ち着ける空間",
-            desc: "完全予約制のプライベート空間で、周りを気にせずリラックス。",
+            title: "完全予約制のプライベート空間",
+            desc: "周りを気にせず、ゆったりと自分のペースで過ごせます。",
           },
           {
-            title: "トータルで提案",
-            desc: "ネイル×フェイシャル×ボディを目的に合わせて組み合わせ。",
+            title: "トータルで整える提案",
+            desc: "ネイル×フェイシャル×ボディ。目的に合わせて組み合わせもOK。",
           },
           {
             title: "守口・大日エリア",
-            desc: "大日駅から少し離れた住宅地。詳細はご予約確定後のご案内も可能。",
+            desc: "住宅地の隠れ家サロン。詳細はご予約確定後のご案内も可能です。",
           },
         ].map((x) => (
-          <div
-            key={x.title}
-            className="rounded-2xl border border-neutral-200 bg-white p-6"
-          >
-            <p className="text-sm font-semibold text-neutral-900">{x.title}</p>
+          <GlassCard key={x.title} className="p-6">
+            <h2 className="section-title text-lg font-semibold text-neutral-900">
+              {x.title}
+            </h2>
             <p className="mt-2 text-sm leading-7 text-neutral-700">{x.desc}</p>
-          </div>
+          </GlassCard>
         ))}
-      </section>
+      </div>
+
+      <GlassCard className="p-6 md:p-8">
+        <h2 className="section-title text-lg font-semibold text-neutral-900">
+          はじめての方へ
+        </h2>
+        <ol className="mt-4 grid gap-3 md:grid-cols-3">
+          {[
+            { t: "① 予約", d: "ホットペッパーからメニューを選んで予約" },
+            { t: "② 来店", d: "カウンセリングで悩みや目的を相談" },
+            { t: "③ 施術", d: "丁寧に施術。次回の提案もOK" },
+          ].map((s) => (
+            <li
+              key={s.t}
+              className="rounded-2xl border border-white/60 bg-white/50 p-4 backdrop-blur"
+            >
+              <p className="text-sm font-semibold text-neutral-900">{s.t}</p>
+              <p className="mt-1 text-sm text-neutral-700">{s.d}</p>
+            </li>
+          ))}
+        </ol>
+      </GlassCard>
     </div>
   );
 }
