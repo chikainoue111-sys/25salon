@@ -1,5 +1,5 @@
 import { siteConfig } from "@/lib/site";
-import { GlassCard, PageHeader, PrimaryButton } from "@/components/ui";
+import { PageHeader, PrimaryButton, SoftCard } from "@/components/ui";
 
 export default function CouponsPage() {
   return (
@@ -7,15 +7,19 @@ export default function CouponsPage() {
       <PageHeader
         eyebrow="Coupons"
         title="クーポン"
-        description="クーポンはホットペッパービューティーに掲載しています。最新の内容はこちらからご確認ください。"
-        actions={<PrimaryButton href={siteConfig.reservationUrl}>クーポンを見る／予約する</PrimaryButton>}
+        description="最新のクーポンはホットペッパーに掲載しています。"
+        actions={
+          <PrimaryButton href={siteConfig.reservationUrl}>
+            ホットペッパーでクーポンを見る
+          </PrimaryButton>
+        }
       />
 
-      <GlassCard className="p-6">
+      <SoftCard className="p-6">
         <p className="text-sm leading-7 text-neutral-700">
-          迷ったら「相談して決めたい」系のクーポンを選ぶのがおすすめ。来店時に悩みを聞いて最適な内容に調整できます。
+          クーポン情報は随時更新されます。最新の内容は予約ページをご確認ください。
         </p>
-      </GlassCard>
+      </SoftCard>
     </div>
   );
 }

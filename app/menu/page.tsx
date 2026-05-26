@@ -1,12 +1,12 @@
 import { siteConfig } from "@/lib/site";
-import { GlassCard, PageHeader, PrimaryButton } from "@/components/ui";
+import { PageHeader, PrimaryButton, SoftCard } from "@/components/ui";
 
 type MenuRow = {
   name: string;
   desc: string;
-  priceNote: string; // 後で "¥6,600" に差し替え
-  timeNote: string;  // 後で "60分" に差し替え
-  tag?: string;      // "人気" とか
+  priceNote: string;
+  timeNote: string;
+  tag?: string;
 };
 
 const menu = {
@@ -26,7 +26,7 @@ const menu = {
     },
     {
       name: "オフ／ケア",
-      desc: "付替オ��・オフのみ・甘皮ケア・整爪など",
+      desc: "付替オフ・オフのみ・甘皮ケア・整爪など",
       priceNote: "要確認",
       timeNote: "要確認",
     },
@@ -92,13 +92,8 @@ function Badge({ children }: { children: React.ReactNode }) {
 
 function Section({ title, rows }: { title: string; rows: MenuRow[] }) {
   return (
-    <GlassCard className="p-6">
-      <div className="flex items-center justify-between gap-3">
-        <h2 className="section-title text-lg font-semibold text-neutral-900">
-          {title}
-        </h2>
-        <span className="h-px flex-1 bg-gradient-to-r from-accent-400/70 via-accent-400/10 to-transparent" />
-      </div>
+    <SoftCard className="p-6">
+      <h2 className="section-title text-lg font-semibold text-neutral-900">{title}</h2>
 
       <div className="mt-4 overflow-hidden rounded-2xl border border-white/60 bg-white/55 backdrop-blur">
         <div className="grid grid-cols-[1fr_92px_92px] bg-white/50 text-[11px] font-semibold tracking-[0.12em] text-neutral-600">
@@ -119,7 +114,7 @@ function Section({ title, rows }: { title: string; rows: MenuRow[] }) {
               <div className="flex flex-wrap items-center gap-2">
                 <p className="text-sm font-semibold text-neutral-900">{r.name}</p>
                 {r.tag ? (
-                  <span className="rounded-full bg-accent-100 px-2 py-0.5 text-[11px] font-semibold text-neutral-800">
+                  <span className="rounded-full bg-neutral-900/10 px-2 py-0.5 text-[11px] font-semibold text-neutral-800">
                     {r.tag}
                   </span>
                 ) : null}
@@ -136,7 +131,7 @@ function Section({ title, rows }: { title: string; rows: MenuRow[] }) {
           </div>
         ))}
       </div>
-    </GlassCard>
+    </SoftCard>
   );
 }
 
