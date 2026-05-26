@@ -3,148 +3,165 @@
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 
-type Slide = {
-  sp: string; // 例: "/hero/sp-01.jpg"
-  pc: string; // 例: "/hero/pc-01.jpg"
+export type Slide = {
+  sp: string;
+  pc: string;
   alt: string;
-  position?: string; // 例: "50% 35%"（coverの切れ方を調整）
+  position?: string;
 };
+
+type Phase = "hold" | "fade";
 
 export default function HeroSlider({
   slides,
-  autoMs = 3800, // 1枚長すぎ対策（短め）
-  fadeMs = 1400, // ふわーっと（長め）
+  holdMs = 5333,
+  fadeMs = 2800,
+  overlay = 0.38,
 }: {
   slides: Slide[];
-  autoMs?: number;
+  holdMs?: number;
   fadeMs?: number;
+  overlay?: number;
 }) {
   const safeSlides = useMemo(() => slides.filter(Boolean), [slides]);
 
   const [active, setActive] = useState(0);
   const [next, setNext] = useState<number | null>(null);
-  const [fading, setFading] = useState(false);
+  const [mix, setMix] = useState(0); // 0..1
 
-  const timerRef = useRef<number | null>(null);
-  const fadeRef = useRef<number | null>(null);
+  const rafRef = useRef<number | null>(null);
+  const phaseRef = useRef<Phase>("hold");
+  const tRef = useRef<number>(0);
 
-  const startFadeTo = (toIndex: number) => {
-    if (safeSlides.length <= 1) return;
-    if (toIndex === active) return;
-    if (fading) return;
-
-    setNext(toIndex);
-    requestAnimationFrame(() => setFading(true));
-
-    if (fadeRef.current) window.clearTimeout(fadeRef.current);
-    fadeRef.current = window.setTimeout(() => {
-      setActive(toIndex);
-      setNext(null);
-      setFading(false);
-    }, fadeMs);
+  const clearRaf = () => {
+    if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
+    rafRef.current = null;
   };
 
   useEffect(() => {
+    clearRaf();
     if (safeSlides.length <= 1) return;
 
-    timerRef.current = window.setInterval(() => {
-      const to = (active + 1) % safeSlides.length;
-      startFadeTo(to);
-    }, autoMs);
+    // start fresh
+    phaseRef.current = "hold";
+    setNext(null);
+    setMix(0);
+    tRef.current = performance.now();
 
-    return () => {
-      if (timerRef.current) window.clearInterval(timerRef.current);
-      if (fadeRef.current) window.clearTimeout(fadeRef.current);
+    const step = (now: number) => {
+      const dt = now - tRef.current;
+
+      if (phaseRef.current === "hold") {
+        if (dt >= holdMs) {
+          // begin fade
+          const to = (active + 1) % safeSlides.length;
+          setNext(to);
+          phaseRef.current = "fade";
+          tRef.current = now;
+        }
+      } else {
+        // fade
+        const p = Math.min(1, dt / fadeMs);
+        setMix(p);
+
+        if (p >= 1) {
+          // commit to next
+          setActive((prev) => (prev + 1) % safeSlides.length);
+          setNext(null);
+          setMix(0);
+          phaseRef.current = "hold";
+          tRef.current = now;
+        }
+      }
+
+      rafRef.current = requestAnimationFrame(step);
     };
-  }, [active, autoMs, safeSlides.length]);
+
+    rafRef.current = requestAnimationFrame(step);
+
+    return () => clearRaf();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [safeSlides.length, holdMs, fadeMs, active]);
+
+  // 画面が非表示→再表示のときに復帰しやすくする
+  useEffect(() => {
+    const onVis = () => {
+      if (document.visibilityState === "visible") {
+        // 時刻基準をリセット（dtが暴れないように）
+        tRef.current = performance.now();
+      }
+    };
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, []);
 
   const a = safeSlides[active];
   const b = next === null ? null : safeSlides[next];
 
-  // デフォルトは少し上寄せ（顔やロゴが切れにくい）
-  const objectPosition = a?.position ?? "50% 35%";
-  const nextPosition = b?.position ?? "50% 35%";
+  const posA = a?.position ?? "50% 35%";
+  const posB = b?.position ?? "50% 35%";
 
   return (
     <div className="relative overflow-hidden">
       <div className="relative aspect-[4/5] w-full md:aspect-[16/8]">
-        {/* base: SP */}
+        {/* base */}
         <Image
           src={a.sp}
           alt={a.alt}
           fill
           priority
           className="object-cover md:hidden"
-          style={{ objectPosition }}
+          style={{ objectPosition: posA }}
           sizes="100vw"
         />
-        {/* base: PC */}
         <Image
           src={a.pc}
           alt={a.alt}
           fill
           priority
           className="hidden object-cover md:block"
-          style={{ objectPosition }}
+          style={{ objectPosition: posA }}
           sizes="1100px"
         />
 
-        {/* next layer (cross-fade): SP/PC */}
+        {/* next (opacity = mix) */}
         {b ? (
           <>
             <Image
               src={b.sp}
               alt={b.alt}
               fill
-              className={[
-                "object-cover transition-opacity ease-in-out md:hidden",
-                fading ? "opacity-100" : "opacity-0",
-              ].join(" ")}
-              style={{
-                objectPosition: nextPosition,
-                transitionDuration: `${fadeMs}ms`,
-              }}
+              className="object-cover md:hidden"
               sizes="100vw"
+              style={{
+                objectPosition: posB,
+                opacity: mix,
+                willChange: "opacity",
+              }}
             />
             <Image
               src={b.pc}
               alt={b.alt}
               fill
-              className={[
-                "hidden object-cover transition-opacity ease-in-out md:block",
-                fading ? "opacity-100" : "opacity-0",
-              ].join(" ")}
-              style={{
-                objectPosition: nextPosition,
-                transitionDuration: `${fadeMs}ms`,
-              }}
+              className="hidden object-cover md:block"
               sizes="1100px"
+              style={{
+                objectPosition: posB,
+                opacity: mix,
+                willChange: "opacity",
+              }}
             />
           </>
         ) : null}
 
         {/* overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-black/10" />
+        <div
+          className="absolute inset-0"
+          style={{ background: `rgba(0,0,0,${overlay})` }}
+        />
       </div>
 
-      {/* dots */}
-      {safeSlides.length > 1 ? (
-        <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-2">
-          {safeSlides.map((_, idx) => (
-            <button
-              key={idx}
-              aria-label={`slide ${idx + 1}`}
-              onClick={() => startFadeTo(idx)}
-              className={[
-                "h-2 w-2 rounded-full border border-white/60 transition",
-                idx === active && next === null
-                  ? "bg-white"
-                  : "bg-white/30 hover:bg-white/45",
-              ].join(" ")}
-            />
-          ))}
-        </div>
-      ) : null}
+      {/* ドットは完全に撤去 */}
     </div>
   );
 }

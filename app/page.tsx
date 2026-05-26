@@ -1,11 +1,16 @@
-import HeroSlider from "@/components/HeroSlider";
+import HeroSlider, { type Slide } from "@/components/HeroSlider";
 import BottomTabs from "@/components/BottomTabs";
 import SectionTitle from "@/components/SectionTitle";
 import MediaBlock from "@/components/MediaBlock";
 import { siteConfig } from "@/lib/site";
 
-const slides = [
-  { sp: "/hero/sp-01.jpg", pc: "/hero/pc-01.jpg", alt: "25salon ヒーロー 1" },
+const slides: Slide[] = [
+  {
+    sp: "/hero/sp-01.jpg",
+    pc: "/hero/pc-01.jpg",
+    alt: "25salon ヒーロー 1",
+    position: "50% 50%",
+  },
   { sp: "/hero/sp-02.jpg", pc: "/hero/pc-02.jpg", alt: "25salon ヒーロー 2" },
   { sp: "/hero/sp-03.jpg", pc: "/hero/pc-03.jpg", alt: "25salon ヒーロー 3" },
 ];
@@ -52,35 +57,84 @@ export default function HomePage() {
       <section className="mx-auto max-w-6xl">
         <div className="overflow-hidden rounded-[28px] border border-white/60 bg-white/20 backdrop-blur-xl shadow-[0_30px_70px_-55px_rgba(0,0,0,0.75)]">
           <div className="relative">
-            <HeroSlider slides={slides} autoMs={3800} fadeMs={1400} />
+            {/* overlay明るめ固定 */}
+            <HeroSlider slides={slides} holdMs={5333} fadeMs={2800} overlay={0.38} />
 
-            {/* text overlay */}
             <div className="absolute inset-x-0 top-0 p-5 md:p-10">
-              <p className="text-xs font-medium tracking-[0.22em] text-white/85">
+              <p
+                className="text-xs font-medium tracking-[0.22em] text-white/85"
+                style={{ textShadow: "0 2px 10px rgba(0,0,0,0.35)" }}
+              >
                 {siteConfig.area}｜完全予約制
               </p>
 
-              <h1 className="mt-3 font-serif text-4xl font-semibold leading-[1.05] text-white drop-shadow md:text-6xl">
+              <h1
+                className="mt-3 font-serif text-4xl font-semibold leading-[1.05] text-white md:text-6xl"
+                style={{ textShadow: "0 10px 28px rgba(0,0,0,0.35)" }}
+              >
                 25salon
               </h1>
 
-              <p className="mt-3 max-w-xl text-sm leading-7 text-white/90 md:text-base">
+              {/* ゴールドラインは無し。余白だけ戻す */}
+              <div className="mt-3" />
+
+              <p
+                className="mt-3 max-w-xl text-sm leading-7 text-white/90 md:text-base"
+                style={{ textShadow: "0 2px 12px rgba(0,0,0,0.35)" }}
+              >
                 静かに整う、プライベートトータルサロン。
               </p>
 
-              <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+              {/* ヒーロー内ボタン：スマホでは非表示（フッタータブに導線あるため） */}
+              <div className="mt-5 hidden sm:flex flex-col gap-3 sm:flex-row sm:items-center">
+                {/* Primary：ご予約 */}
                 <a
                   href={siteConfig.reservationUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-neutral-900 shadow-lg shadow-black/20 hover:bg-white/90"
+                  className={[
+                    // layout
+                    "group relative isolate inline-flex items-center justify-center rounded-full px-7 py-3.5 text-sm font-semibold",
+                    "min-w-[176px]",
+
+                    // text
+                    "text-white",
+
+                    // base shadow / ring
+                    "ring-1 ring-white/15 shadow-lg shadow-black/20",
+
+                    // motion + lift
+                    "transform-gpu transition-all duration-300 ease-out",
+                    "hover:-translate-y-1 hover:scale-[1.03] active:translate-y-0 active:scale-[0.99]",
+
+                    // make it feel brighter on hover
+                    "hover:brightness-[1.08] hover:saturate-[1.05]",
+                    "hover:shadow-xl hover:shadow-black/35",
+                  ].join(" ")}
+                  style={{
+                    background:
+                      "linear-gradient(180deg, rgba(var(--accent),0.95) 0%, rgba(var(--accent),0.78) 55%, rgba(var(--accent),0.92) 100%)",
+                  }}
                 >
-                  予約はこちら
+                  {/* hover時の“白い艶” */}
+                  <span
+                    className={[
+                      "pointer-events-none absolute inset-0 -z-10 rounded-full opacity-0",
+                      "transition-opacity duration-300 ease-out",
+                      "group-hover:opacity-100",
+                    ].join(" ")}
+                    style={{
+                      background:
+                        "linear-gradient(180deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.10) 45%, rgba(255,255,255,0.00) 100%)",
+                    }}
+                  />
+                  ご予約はこちら
                 </a>
 
+                {/* Secondary：テキストリンクにして主張を落とす */}
                 <a
                   href="#menu"
-                  className="inline-flex items-center justify-center rounded-full border border-white/45 bg-white/10 px-6 py-3 text-sm font-semibold text-white backdrop-blur hover:bg-white/15"
+                  className="inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-medium text-white/85 hover:text-white/95"
                 >
                   メニュー／料金
                 </a>
@@ -95,7 +149,6 @@ export default function HomePage() {
         <SectionTitle id="about" title="about us" subtitle="サロンについて" />
 
         <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-2 md:items-center">
-          {/* 画像が無ければプレースホルダー */}
           <MediaBlock src={undefined} alt="サロン写真（後から差し替え）" />
 
           <div className="rounded-[28px] border border-white/60 bg-white/35 p-6 backdrop-blur-xl shadow-[0_18px_50px_-40px_rgba(0,0,0,0.6)] md:p-8">
@@ -218,7 +271,6 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* map placeholder */}
         <div className="mx-auto max-w-6xl">
           <MediaBlock src={undefined} alt="Google Map（後から埋め込み）" />
         </div>
@@ -238,7 +290,6 @@ export default function HomePage() {
               ホットペッパーで予約する
             </OutlineButton>
 
-            {/* 後で差し替え */}
             <OutlineButton href={siteConfig.reservationUrl} external>
               LINEで予約する（後で差し替え）
             </OutlineButton>
