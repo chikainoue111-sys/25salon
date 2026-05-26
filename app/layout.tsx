@@ -3,7 +3,6 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Noto_Sans_JP, Noto_Serif_JP } from "next/font/google";
-import MobileReservationBar from "@/components/MobileReservationBar";
 
 const sans = Noto_Sans_JP({
   subsets: ["latin"],
@@ -37,10 +36,9 @@ export default function RootLayout({
       >
         <Header />
         <main className="mx-auto w-full max-w-6xl px-4 py-10 pb-24 md:pb-10">
-  {children}
-</main>
+          {children}
+          </main>
         <Footer />
-        <MobileReservationBar />
       </body>
     </html>
   );

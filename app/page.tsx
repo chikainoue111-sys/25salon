@@ -1,69 +1,226 @@
+import HeroSlider from "@/components/HeroSlider";
+import BottomTabs from "@/components/BottomTabs";
+import SectionTitle from "@/components/SectionTitle";
+import MediaBlock from "@/components/MediaBlock";
 import { siteConfig } from "@/lib/site";
-import { GlassCard, PageHeader, PrimaryButton, SecondaryButton } from "@/components/ui";
+
+const slides = [
+  { src: "/hero/01.JPG", alt: "サロンの雰囲気" },
+  { src: "/hero/02.JPG", alt: "施術イメージ" },
+  { src: "/hero/03.JPG", alt: "ネイル・ビューティー" },
+];
+
+function Price({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="text-right text-sm font-medium tracking-wide text-neutral-700">
+      {children}
+    </p>
+  );
+}
+
+function OutlineButton({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <a
+      href={href}
+      className="inline-flex w-full items-center justify-center rounded-full border border-neutral-900/35 bg-white/25 px-6 py-4 text-sm font-semibold text-neutral-900 backdrop-blur hover:bg-white/40 md:w-auto"
+    >
+      {children}
+    </a>
+  );
+}
 
 export default function HomePage() {
   return (
-    <div className="space-y-10 md:space-y-14">
-      <GlassCard className="p-7 md:p-12">
-        <PageHeader
-          eyebrow={`${siteConfig.area}｜完全予約制`}
-          title="ネイルも肌も体も。静かに整う、隠れ家トータルサロン"
-          description="ジェルネイル（ハンド・フット）／毛穴洗浄／ハーブピーリング／たるみケア／よもぎ蒸し／脱毛／痩身／耳ツボまで。目的や悩みに合わせて、無理のないメニューをご提案します。"
-          actions={
-            <div className="flex flex-col gap-3 sm:flex-row">
-              <PrimaryButton href={siteConfig.reservationUrl}>
-                ホットペッパーで予約する
-              </PrimaryButton>
-              <SecondaryButton href="/menu">メニューを見る</SecondaryButton>
+    <div id="top" className="space-y-14 pb-24 md:pb-10">
+      {/* HERO */}
+      <section className="mx-auto max-w-6xl">
+        <div className="overflow-hidden rounded-[28px] border border-white/60 bg-white/20 backdrop-blur-xl shadow-[0_30px_70px_-55px_rgba(0,0,0,0.75)]">
+          <div className="relative">
+            <HeroSlider slides={slides} />
+            <div className="absolute inset-x-0 top-0 p-5 md:p-10">
+              <p className="text-xs font-medium tracking-[0.22em] text-white/85">
+                {siteConfig.area}｜完全予約制
+              </p>
+
+              <h1 className="mt-3 font-serif text-4xl font-semibold leading-[1.05] text-white drop-shadow md:text-6xl">
+                25salon
+              </h1>
+
+              <p className="mt-3 max-w-xl text-sm leading-7 text-white/90 md:text-base">
+                静かに整う、プライベートトータルサロン。
+              </p>
+
+              <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+                <a
+                  href={siteConfig.reservationUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-neutral-900 shadow-lg shadow-black/20 hover:bg-white/90"
+                >
+                  予約はこちら
+                </a>
+                <a
+                  href="#menu"
+                  className="inline-flex items-center justify-center rounded-full border border-white/45 bg-white/10 px-6 py-3 text-sm font-semibold text-white backdrop-blur hover:bg-white/15"
+                >
+                  メニュー／料金
+                </a>
+              </div>
             </div>
-          }
-        />
-      </GlassCard>
+          </div>
+        </div>
+      </section>
 
-      <div className="grid gap-4 md:grid-cols-3">
-        {[
-          {
-            title: "完全予約制のプライベート空間",
-            desc: "周りを気にせず、ゆったりと自分のペースで過ごせます。",
-          },
-          {
-            title: "トータルで整える提案",
-            desc: "ネイル×フェイシャル×ボディ。目的に合わせて組み合わせもOK。",
-          },
-          {
-            title: "守口・大日エリア",
-            desc: "住宅地の隠れ家サロン。詳細はご予約確定後のご案内も可能です。",
-          },
-        ].map((x) => (
-          <GlassCard key={x.title} className="p-6">
-            <h2 className="section-title text-lg font-semibold text-neutral-900">
-              {x.title}
-            </h2>
-            <p className="mt-2 text-sm leading-7 text-neutral-700">{x.desc}</p>
-          </GlassCard>
-        ))}
-      </div>
+      {/* ABOUT */}
+      <section className="space-y-8">
+        <SectionTitle id="about" title="about us" subtitle="サロンについて" />
 
-      <GlassCard className="p-6 md:p-8">
-        <h2 className="section-title text-lg font-semibold text-neutral-900">
-          はじめての方へ
-        </h2>
-        <ol className="mt-4 grid gap-3 md:grid-cols-3">
+        <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-2 md:items-center">
+          <MediaBlock src={undefined} alt="サロン写真（後から差し替え）" />
+
+          <div className="rounded-[28px] border border-white/60 bg-white/35 p-6 backdrop-blur-xl shadow-[0_18px_50px_-40px_rgba(0,0,0,0.6)] md:p-8">
+            <h3 className="font-serif text-2xl font-semibold text-neutral-900">
+              心と身体を整える
+            </h3>
+            <p className="mt-4 text-sm leading-7 text-neutral-800 md:text-base">
+              ネイル／フェイシャル／ボディまで。目的や悩みに合わせて、
+              無理のないメニューをご提案します。
+              <br />
+              静かな空間で、ゆったりと自分のペースでお過ごしください。
+            </p>
+
+            <div className="mt-6">
+              <OutlineButton href="/salon">もっと見る</OutlineButton>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* MENU */}
+      <section className="space-y-8">
+        <SectionTitle id="menu" title="menu" subtitle="メニュー" />
+
+        <div className="mx-auto max-w-6xl space-y-10">
           {[
-            { t: "① 予約", d: "ホットペッパーからメニューを選んで予約" },
-            { t: "② 来店", d: "カウンセリングで悩みや目的を相談" },
-            { t: "③ 施術", d: "丁寧に施術。次回の提案もOK" },
-          ].map((s) => (
-            <li
-              key={s.t}
-              className="rounded-2xl border border-white/60 bg-white/50 p-4 backdrop-blur"
-            >
-              <p className="text-sm font-semibold text-neutral-900">{s.t}</p>
-              <p className="mt-1 text-sm text-neutral-700">{s.d}</p>
-            </li>
+            {
+              title: "美肌 — aesthetic",
+              desc:
+                "毛穴ケアから角質除去、さらに美容液導入まで。肌管理メニューをご用意しています。",
+              price: "— ¥7,000〜",
+              img: undefined,
+            },
+            {
+              title: "脱毛 — removal",
+              desc:
+                "痛みの少ない最新機器を導入。毛穴レスでなめらかな肌に仕上げます。",
+              price: "— ¥1,300〜",
+              img: undefined,
+            },
+            {
+              title: "よもぎ蒸し — mugwort",
+              desc:
+                "冷え・巡り・リラックスに。温活として続けやすいメニューです。",
+              price: "— ¥3,500〜",
+              img: undefined,
+            },
+          ].map((m) => (
+            <div key={m.title} className="space-y-5">
+              <MediaBlock src={m.img} alt={m.title} />
+              <div className="px-1">
+                <h3 className="font-serif text-2xl font-semibold text-neutral-900 md:text-3xl">
+                  {m.title}
+                </h3>
+                <p className="mt-3 text-sm leading-7 text-neutral-800 md:text-base">
+                  {m.desc}
+                </p>
+                <div className="mt-4">
+                  <Price>{m.price}</Price>
+                </div>
+                <div className="mt-5">
+                  <OutlineButton href="/menu">詳しく見る</OutlineButton>
+                </div>
+              </div>
+            </div>
           ))}
-        </ol>
-      </GlassCard>
+
+          <div className="pt-4 text-center">
+            <a
+              href="/menu"
+              className="inline-flex items-center justify-center rounded-none bg-neutral-900/10 px-10 py-5 text-sm font-semibold tracking-[0.18em] text-neutral-900 hover:bg-neutral-900/15"
+            >
+              メニュー＆料金一覧
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* INFORMATION */}
+      <section className="space-y-8">
+        <SectionTitle id="info" title="information" subtitle="店舗情報" />
+
+        <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-2 md:items-start">
+          <MediaBlock src={undefined} alt="外観写真（後から差し替え）" />
+
+          <div className="rounded-[28px] border border-white/60 bg-white/35 p-6 backdrop-blur-xl shadow-[0_18px_50px_-40px_rgba(0,0,0,0.6)] md:p-8">
+            <div className="space-y-3 text-sm leading-7 text-neutral-800 md:text-base">
+              <p className="font-semibold">住所</p>
+              <p>大阪府守口市（詳細はご予約確定後にご案内）</p>
+              <p className="pt-2 font-semibold">営業時間</p>
+              <p>10:00〜18:00（最終受付 17:30）</p>
+              <p className="pt-2 font-semibold">アクセス</p>
+              <p>大日・守口エリア（駅から徒歩圏）</p>
+            </div>
+
+            <div className="mt-6 grid gap-3">
+              <a
+                href={siteConfig.reservationUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center rounded-full bg-neutral-900 px-6 py-4 text-sm font-semibold text-white shadow-lg shadow-black/10 hover:bg-neutral-800"
+              >
+                予約（Hotpepper）
+              </a>
+              <a
+                href="#contact"
+                className="inline-flex items-center justify-center rounded-full border border-neutral-900/35 bg-white/25 px-6 py-4 text-sm font-semibold text-neutral-900 backdrop-blur hover:bg-white/40"
+              >
+                お問い合わせ
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* map placeholder */}
+        <div className="mx-auto max-w-6xl">
+          <MediaBlock src={undefined} alt="Google Map（後から埋め込み）" />
+        </div>
+      </section>
+
+      {/* CONTACT */}
+      <section id="contact" className="space-y-8">
+        <SectionTitle title="contact" subtitle="お問い合わせ" />
+
+        <div className="mx-auto max-w-3xl space-y-4">
+          <p className="text-center text-lg font-semibold text-neutral-900">
+            お問い合わせ・ご予約は、お気軽にご連絡ください
+          </p>
+
+          <div className="grid gap-3">
+            {/* 電話・LINEは後でURL差し替え */}
+            <OutlineButton href={siteConfig.reservationUrl}>ホットペッパーで予約する</OutlineButton>
+            <OutlineButton href={siteConfig.reservationUrl}>LINEで予約する（後で差し替え）</OutlineButton>
+          </div>
+
+          <div className="pt-4 text-center">
+            <a href="/cancel" className="inline-flex items-center gap-2 text-sm font-semibold text-neutral-800 hover:underline">
+              <span className="text-xl leading-none">›</span>
+              キャンセルについてはこちら
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <BottomTabs />
     </div>
   );
 }

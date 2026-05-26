@@ -14,24 +14,27 @@ export function PageHeader({
   return (
     <header className="space-y-3">
       {eyebrow ? (
-        <p className="text-xs font-medium tracking-[0.18em] text-neutral-600">
+        <p className="text-xs font-medium tracking-[0.22em] text-neutral-600">
           {eyebrow}
         </p>
       ) : null}
-      <h1 className="section-title text-2xl font-semibold leading-tight text-neutral-900 md:text-4xl">
+
+      <h1 className="section-title text-3xl font-semibold leading-[1.15] text-neutral-900 md:text-5xl">
         {title}
       </h1>
+
       {description ? (
         <p className="max-w-2xl text-sm leading-7 text-neutral-700 md:text-base">
           {description}
         </p>
       ) : null}
+
       {actions ? <div className="pt-1">{actions}</div> : null}
     </header>
   );
 }
 
-export function GlassCard({
+export function Surface({
   children,
   className = "",
 }: {
@@ -41,7 +44,28 @@ export function GlassCard({
   return (
     <section
       className={[
-        "rounded-3xl border border-white/60 bg-white/60 backdrop-blur-xl shadow-[0_10px_40px_-20px_rgba(0,0,0,0.35)]",
+        "rounded-[28px] border border-white/70 bg-white/55 backdrop-blur-xl",
+        "shadow-[0_24px_60px_-45px_rgba(0,0,0,0.55)]",
+        className,
+      ].join(" ")}
+    >
+      {children}
+    </section>
+  );
+}
+
+export function SoftCard({
+  children,
+  className = "",
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <section
+      className={[
+        "rounded-[22px] border border-white/70 bg-white/45 backdrop-blur",
+        "shadow-[0_18px_50px_-40px_rgba(0,0,0,0.55)]",
         className,
       ].join(" ")}
     >
@@ -62,14 +86,17 @@ export function PrimaryButton({
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="inline-flex items-center justify-center rounded-full bg-neutral-900 px-6 py-3 text-sm font-medium text-white shadow-lg shadow-black/10 hover:bg-neutral-800"
+      className={[
+        "inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-medium",
+        "bg-neutral-900 text-white shadow-lg shadow-black/10 hover:bg-neutral-800",
+      ].join(" ")}
     >
       {children}
     </a>
   );
 }
 
-export function SecondaryButton({
+export function GhostButton({
   href,
   children,
 }: {
@@ -79,9 +106,18 @@ export function SecondaryButton({
   return (
     <a
       href={href}
-      className="inline-flex items-center justify-center rounded-full border border-neutral-300/80 bg-white/60 px-6 py-3 text-sm font-medium text-neutral-900 backdrop-blur hover:bg-white/80"
+      className={[
+        "inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-medium",
+        "border border-neutral-200/80 bg-white/35 text-neutral-900 backdrop-blur hover:bg-white/60",
+      ].join(" ")}
     >
       {children}
     </a>
+  );
+}
+
+export function AccentRule() {
+  return (
+    <div className="mt-3 h-px w-24 bg-gradient-to-r from-[rgb(var(--accent))]/70 via-[rgb(var(--accent))]/20 to-transparent" />
   );
 }
