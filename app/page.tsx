@@ -67,12 +67,100 @@ function OutlineButton({
   );
 }
 
+function ChipLink({
+  href,
+  children,
+  external,
+}: {
+  href: string;
+  children: React.ReactNode;
+  external?: boolean;
+}) {
+  const cls =
+    "inline-flex items-center justify-center rounded-full border border-white/55 bg-white/25 px-4 py-2 text-xs font-semibold tracking-wide text-neutral-900 backdrop-blur transition hover:bg-white/35";
+
+  if (external) {
+    return (
+      <a href={href} target="_blank" rel="noreferrer" className={cls}>
+        {children}
+      </a>
+    );
+  }
+
+  return (
+    <a href={href} className={cls}>
+      {children}
+    </a>
+  );
+}
+
+function ScrollIndicator({
+  href,
+  label = "VIEW MORE",
+}: {
+  href: string;
+  label?: string;
+}) {
+  return (
+    <a
+      href={href}
+      aria-label={label}
+      className="group absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full px-6 py-4"
+    >
+      {/* label: 金色をclassで固定（黒に上書きされないように） */}
+      <span
+        className="block text-[11px] font-semibold tracking-[0.26em]"
+        style={{
+          color: "rgba(var(--accent), 0.95)",
+          textShadow: "0 2px 12px rgba(0,0,0,0.45)",
+        }}
+      >
+        {label}
+      </span>
+
+      {/* thin line */}
+      <span
+        className="mx-auto mt-2 block h-10 w-px rounded-full"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(255,255,255,0.00), rgba(var(--accent),0.65), rgba(255,255,255,0.00))",
+        }}
+      />
+
+      {/* floating chevron (ここにアニメを確実に付与) */}
+      <span
+        className="mx-auto mt-2 block h-5 w-5"
+        style={{ animation: "floatYSoft 1.9s ease-in-out infinite" }}
+      >
+        <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden="true">
+          <path
+            d="M6.5 9.5l5.5 5.5 5.5-5.5"
+            stroke="rgba(var(--accent),0.95)"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </span>
+
+      {/* hover subtle brighten */}
+      <span
+        className="pointer-events-none absolute inset-0 rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        style={{
+          background:
+            "radial-gradient(closest-side, rgba(255,255,255,0.12), rgba(255,255,255,0.00))",
+        }}
+      />
+    </a>
+  );
+}
+
 export default function HomePage() {
   const isMobile = useIsMobile();
 
-  // スマホは半分の時間（体感をPCと合わせる）
-  const holdMs = isMobile ? 2666 : 5333;
-  const fadeMs = isMobile ? 1400 : 2800;
+  // 早すぎ → 倍に（ゆっくり）
+  const holdMs = 10666;
+  const fadeMs = 5600;
 
   return (
     <div id="top" className="space-y-14 pb-24 md:pb-10">
@@ -81,7 +169,6 @@ export default function HomePage() {
         <div
           className={[
             "overflow-hidden rounded-[28px] border border-white/60 bg-white/20",
-            // iOSで背景が“もやっ”と見える原因なので、スマホはblur無効、md以上でblur
             "md:backdrop-blur-xl",
             "shadow-[0_30px_70px_-55px_rgba(0,0,0,0.75)]",
           ].join(" ")}
@@ -104,7 +191,6 @@ export default function HomePage() {
                 25salon
               </h1>
 
-              {/* ゴールドラインは無し。余白だけ戻す */}
               <div className="mt-3" />
 
               <p
@@ -114,9 +200,18 @@ export default function HomePage() {
                 静かに整う、プライベートトータルサロン。
               </p>
 
-              {/* ヒーロー内ボタン：スマホでは非表示（フッタータブに導線あるため） */}
+              {/* 小さな導線（スマホでも自然） */}
+              <div className="mt-5 flex flex-wrap gap-2">
+                <ChipLink href="#about">サロンについて</ChipLink>
+                <ChipLink href="#menu">メニュー</ChipLink>
+                <ChipLink href={siteConfig.reservationUrl} external>
+                  予約
+                </ChipLink>
+                <ChipLink href="#info">店舗情報</ChipLink>
+              </div>
+
+              {/* デカいボタンは sm以上だけ */}
               <div className="mt-5 hidden sm:flex flex-col gap-3 sm:flex-row sm:items-center">
-                {/* Primary：ご予約 */}
                 <a
                   href={siteConfig.reservationUrl}
                   target="_blank"
@@ -149,7 +244,6 @@ export default function HomePage() {
                   ご予約はこちら
                 </a>
 
-                {/* Secondary：テキストリンクにして主張を落とす */}
                 <a
                   href="#menu"
                   className="inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-medium text-white/85 hover:text-white/95"
@@ -158,6 +252,9 @@ export default function HomePage() {
                 </a>
               </div>
             </div>
+
+            {/* 上品ゴールドの誘導 */}
+            <ScrollIndicator href="#about" label={isMobile ? "VIEW MORE" : "VIEW MORE"} />
           </div>
         </div>
       </section>
