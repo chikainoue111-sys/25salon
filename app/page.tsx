@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import HeroSlider, { type Slide } from "@/components/HeroSlider";
 import BottomTabs from "@/components/BottomTabs";
 import SectionTitle from "@/components/SectionTitle";
@@ -14,6 +17,20 @@ const slides: Slide[] = [
   { sp: "/hero/sp-02.jpg", pc: "/hero/pc-02.jpg", alt: "25salon ヒーロー 2" },
   { sp: "/hero/sp-03.jpg", pc: "/hero/pc-03.jpg", alt: "25salon ヒーロー 3" },
 ];
+
+function useIsMobile(breakpointPx = 768) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mql = window.matchMedia(`(max-width: ${breakpointPx - 1}px)`);
+    const onChange = () => setIsMobile(mql.matches);
+    onChange();
+    mql.addEventListener("change", onChange);
+    return () => mql.removeEventListener("change", onChange);
+  }, [breakpointPx]);
+
+  return isMobile;
+}
 
 function Price({ children }: { children: React.ReactNode }) {
   return (
@@ -51,14 +68,26 @@ function OutlineButton({
 }
 
 export default function HomePage() {
+  const isMobile = useIsMobile();
+
+  // スマホは半分の時間（体感をPCと合わせる）
+  const holdMs = isMobile ? 2666 : 5333;
+  const fadeMs = isMobile ? 1400 : 2800;
+
   return (
     <div id="top" className="space-y-14 pb-24 md:pb-10">
       {/* HERO */}
       <section className="mx-auto max-w-6xl">
-        <div className="overflow-hidden rounded-[28px] border border-white/60 bg-white/20 backdrop-blur-xl shadow-[0_30px_70px_-55px_rgba(0,0,0,0.75)]">
+        <div
+          className={[
+            "overflow-hidden rounded-[28px] border border-white/60 bg-white/20",
+            // iOSで背景が“もやっ”と見える原因なので、スマホはblur無効、md以上でblur
+            "md:backdrop-blur-xl",
+            "shadow-[0_30px_70px_-55px_rgba(0,0,0,0.75)]",
+          ].join(" ")}
+        >
           <div className="relative">
-            {/* overlay明るめ固定 */}
-            <HeroSlider slides={slides} holdMs={5333} fadeMs={2800} overlay={0.38} />
+            <HeroSlider slides={slides} holdMs={holdMs} fadeMs={fadeMs} overlay={0.38} />
 
             <div className="absolute inset-x-0 top-0 p-5 md:p-10">
               <p
@@ -93,21 +122,11 @@ export default function HomePage() {
                   target="_blank"
                   rel="noreferrer"
                   className={[
-                    // layout
                     "group relative isolate inline-flex items-center justify-center rounded-full px-7 py-3.5 text-sm font-semibold",
                     "min-w-[176px]",
-
-                    // text
-                    "text-white",
-
-                    // base shadow / ring
-                    "ring-1 ring-white/15 shadow-lg shadow-black/20",
-
-                    // motion + lift
+                    "text-white ring-1 ring-white/15 shadow-lg shadow-black/20",
                     "transform-gpu transition-all duration-300 ease-out",
                     "hover:-translate-y-1 hover:scale-[1.03] active:translate-y-0 active:scale-[0.99]",
-
-                    // make it feel brighter on hover
                     "hover:brightness-[1.08] hover:saturate-[1.05]",
                     "hover:shadow-xl hover:shadow-black/35",
                   ].join(" ")}
@@ -116,7 +135,6 @@ export default function HomePage() {
                       "linear-gradient(180deg, rgba(var(--accent),0.95) 0%, rgba(var(--accent),0.78) 55%, rgba(var(--accent),0.92) 100%)",
                   }}
                 >
-                  {/* hover時の“白い艶” */}
                   <span
                     className={[
                       "pointer-events-none absolute inset-0 -z-10 rounded-full opacity-0",
