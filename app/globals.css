@@ -15,7 +15,15 @@ body {
     url("/stone.jpg");
   background-size: cover;
   background-position: center;
-  background-attachment: fixed;
+  /* fixed はスマホでボケやすいのでデフォルトは scroll */
+  background-attachment: scroll;
+}
+
+/* PC以上だけ fixed にする（必要なら） */
+@media (min-width: 768px) {
+  body {
+    background-attachment: fixed;
+  }
 }
 
 a { color: inherit; }

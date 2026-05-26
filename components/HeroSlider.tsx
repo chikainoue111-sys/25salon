@@ -3,12 +3,17 @@
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 
-type Slide = { src: string; alt: string; position?: string };
+type Slide = {
+  sp: string; // 例: "/hero/sp-01.jpg"
+  pc: string; // 例: "/hero/pc-01.jpg"
+  alt: string;
+  position?: string; // 例: "50% 35%"（coverの切れ方を調整）
+};
 
 export default function HeroSlider({
   slides,
-  autoMs = 5500,
-  fadeMs = 700,
+  autoMs = 3800, // 1枚長すぎ対策（短め）
+  fadeMs = 1400, // ふわーっと（長め）
 }: {
   slides: Slide[];
   autoMs?: number;
@@ -16,8 +21,8 @@ export default function HeroSlider({
 }) {
   const safeSlides = useMemo(() => slides.filter(Boolean), [slides]);
 
-  const [active, setActive] = useState(0); // 表示中
-  const [next, setNext] = useState<number | null>(null); // フェードで上に乗せる
+  const [active, setActive] = useState(0);
+  const [next, setNext] = useState<number | null>(null);
   const [fading, setFading] = useState(false);
 
   const timerRef = useRef<number | null>(null);
@@ -29,12 +34,8 @@ export default function HeroSlider({
     if (fading) return;
 
     setNext(toIndex);
-    // 次の画像を乗せた状態で opacity を上げる
-    requestAnimationFrame(() => {
-      setFading(true);
-    });
+    requestAnimationFrame(() => setFading(true));
 
-    // fade完了後にactiveへ反映
     if (fadeRef.current) window.clearTimeout(fadeRef.current);
     fadeRef.current = window.setTimeout(() => {
       setActive(toIndex);
@@ -55,45 +56,71 @@ export default function HeroSlider({
       if (timerRef.current) window.clearInterval(timerRef.current);
       if (fadeRef.current) window.clearTimeout(fadeRef.current);
     };
-    // active を監視して、次のインターバルを作り直す（ズレ防止）
   }, [active, autoMs, safeSlides.length]);
 
-  const activeSlide = safeSlides[active];
-  const nextSlide = next === null ? null : safeSlides[next];
+  const a = safeSlides[active];
+  const b = next === null ? null : safeSlides[next];
 
-  const activePos = activeSlide?.position ?? "50% 35%";
-  const nextPos = nextSlide?.position ?? "50% 35%";
+  // デフォルトは少し上寄せ（顔やロゴが切れにくい）
+  const objectPosition = a?.position ?? "50% 35%";
+  const nextPosition = b?.position ?? "50% 35%";
 
   return (
     <div className="relative overflow-hidden">
       <div className="relative aspect-[4/5] w-full md:aspect-[16/8]">
-        {/* base */}
+        {/* base: SP */}
         <Image
-          src={activeSlide.src}
-          alt={activeSlide.alt}
+          src={a.sp}
+          alt={a.alt}
           fill
           priority
-          className="object-cover"
-          style={{ objectPosition: activePos }}
-          sizes="(max-width: 768px) 100vw, 1100px"
+          className="object-cover md:hidden"
+          style={{ objectPosition }}
+          sizes="100vw"
+        />
+        {/* base: PC */}
+        <Image
+          src={a.pc}
+          alt={a.alt}
+          fill
+          priority
+          className="hidden object-cover md:block"
+          style={{ objectPosition }}
+          sizes="1100px"
         />
 
-        {/* cross fade layer */}
-        {nextSlide ? (
-          <Image
-            src={nextSlide.src}
-            alt={nextSlide.alt}
-            fill
-            className={[
-              "object-cover transition-opacity",
-              fading ? "opacity-100" : "opacity-0",
-            ].join(" ")}
-            style={{
-              objectPosition: nextPos,
-              transitionDuration: `${fadeMs}ms`,
-            }}
-            sizes="(max-width: 768px) 100vw, 1100px"
-          />
+        {/* next layer (cross-fade): SP/PC */}
+        {b ? (
+          <>
+            <Image
+              src={b.sp}
+              alt={b.alt}
+              fill
+              className={[
+                "object-cover transition-opacity ease-in-out md:hidden",
+                fading ? "opacity-100" : "opacity-0",
+              ].join(" ")}
+              style={{
+                objectPosition: nextPosition,
+                transitionDuration: `${fadeMs}ms`,
+              }}
+              sizes="100vw"
+            />
+            <Image
+              src={b.pc}
+              alt={b.alt}
+              fill
+              className={[
+                "hidden object-cover transition-opacity ease-in-out md:block",
+                fading ? "opacity-100" : "opacity-0",
+              ].join(" ")}
+              style={{
+                objectPosition: nextPosition,
+                transitionDuration: `${fadeMs}ms`,
+              }}
+              sizes="1100px"
+            />
+          </>
         ) : null}
 
         {/* overlay */}
@@ -110,7 +137,9 @@ export default function HeroSlider({
               onClick={() => startFadeTo(idx)}
               className={[
                 "h-2 w-2 rounded-full border border-white/60 transition",
-                idx === active && next === null ? "bg-white" : "bg-white/30 hover:bg-white/45",
+                idx === active && next === null
+                  ? "bg-white"
+                  : "bg-white/30 hover:bg-white/45",
               ].join(" ")}
             />
           ))}

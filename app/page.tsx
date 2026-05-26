@@ -5,9 +5,9 @@ import MediaBlock from "@/components/MediaBlock";
 import { siteConfig } from "@/lib/site";
 
 const slides = [
-  { src: "/hero/01.JPG", alt: "サロンの雰囲気" },
-  { src: "/hero/02.JPG", alt: "施術イメージ" },
-  { src: "/hero/03.JPG", alt: "ネイル・ビューティー" },
+  { sp: "/hero/sp-01.jpg", pc: "/hero/pc-01.jpg", alt: "25salon ヒーロー 1" },
+  { sp: "/hero/sp-02.jpg", pc: "/hero/pc-02.jpg", alt: "25salon ヒーロー 2" },
+  { sp: "/hero/sp-03.jpg", pc: "/hero/pc-03.jpg", alt: "25salon ヒーロー 3" },
 ];
 
 function Price({ children }: { children: React.ReactNode }) {
@@ -18,12 +18,28 @@ function Price({ children }: { children: React.ReactNode }) {
   );
 }
 
-function OutlineButton({ href, children }: { href: string; children: React.ReactNode }) {
+function OutlineButton({
+  href,
+  children,
+  external,
+}: {
+  href: string;
+  children: React.ReactNode;
+  external?: boolean;
+}) {
+  const common =
+    "inline-flex w-full items-center justify-center rounded-full border border-neutral-900/35 bg-white/25 px-6 py-4 text-sm font-semibold text-neutral-900 backdrop-blur hover:bg-white/40 md:w-auto";
+
+  if (external) {
+    return (
+      <a href={href} target="_blank" rel="noreferrer" className={common}>
+        {children}
+      </a>
+    );
+  }
+
   return (
-    <a
-      href={href}
-      className="inline-flex w-full items-center justify-center rounded-full border border-neutral-900/35 bg-white/25 px-6 py-4 text-sm font-semibold text-neutral-900 backdrop-blur hover:bg-white/40 md:w-auto"
-    >
+    <a href={href} className={common}>
       {children}
     </a>
   );
@@ -36,7 +52,9 @@ export default function HomePage() {
       <section className="mx-auto max-w-6xl">
         <div className="overflow-hidden rounded-[28px] border border-white/60 bg-white/20 backdrop-blur-xl shadow-[0_30px_70px_-55px_rgba(0,0,0,0.75)]">
           <div className="relative">
-            <HeroSlider slides={slides} />
+            <HeroSlider slides={slides} autoMs={3800} fadeMs={1400} />
+
+            {/* text overlay */}
             <div className="absolute inset-x-0 top-0 p-5 md:p-10">
               <p className="text-xs font-medium tracking-[0.22em] text-white/85">
                 {siteConfig.area}｜完全予約制
@@ -59,6 +77,7 @@ export default function HomePage() {
                 >
                   予約はこちら
                 </a>
+
                 <a
                   href="#menu"
                   className="inline-flex items-center justify-center rounded-full border border-white/45 bg-white/10 px-6 py-3 text-sm font-semibold text-white backdrop-blur hover:bg-white/15"
@@ -76,12 +95,14 @@ export default function HomePage() {
         <SectionTitle id="about" title="about us" subtitle="サロンについて" />
 
         <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-2 md:items-center">
+          {/* 画像が無ければプレースホルダー */}
           <MediaBlock src={undefined} alt="サロン写真（後から差し替え）" />
 
           <div className="rounded-[28px] border border-white/60 bg-white/35 p-6 backdrop-blur-xl shadow-[0_18px_50px_-40px_rgba(0,0,0,0.6)] md:p-8">
             <h3 className="font-serif text-2xl font-semibold text-neutral-900">
               心と身体を整える
             </h3>
+
             <p className="mt-4 text-sm leading-7 text-neutral-800 md:text-base">
               ネイル／フェイシャル／ボディまで。目的や悩みに合わせて、
               無理のないメニューをご提案します。
@@ -126,16 +147,20 @@ export default function HomePage() {
           ].map((m) => (
             <div key={m.title} className="space-y-5">
               <MediaBlock src={m.img} alt={m.title} />
+
               <div className="px-1">
                 <h3 className="font-serif text-2xl font-semibold text-neutral-900 md:text-3xl">
                   {m.title}
                 </h3>
+
                 <p className="mt-3 text-sm leading-7 text-neutral-800 md:text-base">
                   {m.desc}
                 </p>
+
                 <div className="mt-4">
                   <Price>{m.price}</Price>
                 </div>
+
                 <div className="mt-5">
                   <OutlineButton href="/menu">詳しく見る</OutlineButton>
                 </div>
@@ -165,8 +190,10 @@ export default function HomePage() {
             <div className="space-y-3 text-sm leading-7 text-neutral-800 md:text-base">
               <p className="font-semibold">住所</p>
               <p>大阪府守口市（詳細はご予約確定後にご案内）</p>
+
               <p className="pt-2 font-semibold">営業時間</p>
               <p>10:00〜18:00（最終受付 17:30）</p>
+
               <p className="pt-2 font-semibold">アクセス</p>
               <p>大日・守口エリア（駅から徒歩圏）</p>
             </div>
@@ -180,6 +207,7 @@ export default function HomePage() {
               >
                 予約（Hotpepper）
               </a>
+
               <a
                 href="#contact"
                 className="inline-flex items-center justify-center rounded-full border border-neutral-900/35 bg-white/25 px-6 py-4 text-sm font-semibold text-neutral-900 backdrop-blur hover:bg-white/40"
@@ -206,13 +234,21 @@ export default function HomePage() {
           </p>
 
           <div className="grid gap-3">
-            {/* 電話・LINEは後でURL差し替え */}
-            <OutlineButton href={siteConfig.reservationUrl}>ホットペッパーで予約する</OutlineButton>
-            <OutlineButton href={siteConfig.reservationUrl}>LINEで予約する（後で差し替え）</OutlineButton>
+            <OutlineButton href={siteConfig.reservationUrl} external>
+              ホットペッパーで予約する
+            </OutlineButton>
+
+            {/* 後で差し替え */}
+            <OutlineButton href={siteConfig.reservationUrl} external>
+              LINEで予約する（後で差し替え）
+            </OutlineButton>
           </div>
 
           <div className="pt-4 text-center">
-            <a href="/cancel" className="inline-flex items-center gap-2 text-sm font-semibold text-neutral-800 hover:underline">
+            <a
+              href="/cancel"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-neutral-800 hover:underline"
+            >
               <span className="text-xl leading-none">›</span>
               キャンセルについてはこちら
             </a>
