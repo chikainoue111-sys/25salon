@@ -12,31 +12,26 @@ const navItems = [
   { href: "/coupons", label: "クーポン" },
 ] as const;
 
-function MenuIcon({ open }: { open: boolean }) {
+function ChevronIcon({ open }: { open: boolean }) {
   return (
-    <div className="relative h-5 w-6">
-      <span
-        className={[
-          "absolute left-0 top-[2px] h-[2px] w-6 rounded transition",
-          "bg-neutral-900/80",
-          open ? "translate-y-[8px] rotate-45" : "",
-        ].join(" ")}
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+      className={[
+        "h-[18px] w-[18px]",
+        "transition-transform duration-200 ease-out",
+        open ? "rotate-180" : "rotate-0",
+      ].join(" ")}
+    >
+      <path
+        d="M8 10l4 4 4-4"
+        stroke="rgba(17,17,17,0.78)"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
-      <span
-        className={[
-          "absolute left-0 top-[10px] h-[2px] w-6 rounded transition",
-          "bg-neutral-900/80",
-          open ? "opacity-0" : "opacity-100",
-        ].join(" ")}
-      />
-      <span
-        className={[
-          "absolute left-0 top-[18px] h-[2px] w-6 rounded transition",
-          "bg-neutral-900/80",
-          open ? "translate-y-[-8px] -rotate-45" : "",
-        ].join(" ")}
-      />
-    </div>
+    </svg>
   );
 }
 
@@ -54,8 +49,7 @@ export default function Header() {
     <>
       <header
         className={[
-          "sticky top-0 z-50",
-          // “線”じゃなく薄いガラス＋極薄シャドウで高級感
+          "sticky top-0 z-50 relative",
           "bg-white/14",
           "backdrop-blur-md md:backdrop-blur-lg",
           "shadow-[0_10px_30px_-28px_rgba(0,0,0,0.55)]",
@@ -112,18 +106,22 @@ export default function Header() {
             <button
               onClick={() => setOpen((v) => !v)}
               aria-label="メニュー"
+              style={{
+                WebkitTapHighlightColor: "transparent",
+                boxShadow:
+                  "inset 0 0 0 1px rgba(255,255,255,0.16), 0 6px 18px -16px rgba(0,0,0,0.35)",
+              }}
               className={[
-  "inline-flex items-center justify-center rounded-full px-2.5 py-2",
-  "bg-white/08 hover:bg-white/12",
-  "ring-1 ring-white/12",
-  "backdrop-blur-md",
-  "shadow-none",
-  "outline-none focus:outline-none",
-  "focus-visible:ring-2 focus-visible:ring-[rgba(var(--accent),0.35)]",
-  "focus-visible:ring-offset-0",
-].join(" ")}
+                "inline-flex items-center justify-center rounded-full",
+                "h-10 w-10",
+                "bg-white/08 hover:bg-white/12",
+                "backdrop-blur-md",
+                "shadow-none select-none",
+                "outline-none focus:outline-none focus-visible:outline-none",
+                "focus:ring-0 focus-visible:ring-0",
+              ].join(" ")}
             >
-              <MenuIcon open={open} />
+              <ChevronIcon open={open} />
             </button>
           </div>
         </div>
@@ -152,7 +150,8 @@ export default function Header() {
             <p className="text-sm font-semibold text-neutral-900/90">Menu</p>
             <button
               onClick={() => setOpen(false)}
-              className="rounded-full border border-neutral-900/15 bg-white/40 px-3 py-2 text-xs text-neutral-700 hover:bg-white/55"
+              style={{ WebkitTapHighlightColor: "transparent" }}
+              className="rounded-full border border-neutral-900/15 bg-white/40 px-3 py-2 text-xs text-neutral-700 hover:bg-white/55 outline-none focus:outline-none focus:ring-0"
             >
               閉じる
             </button>
@@ -172,6 +171,7 @@ export default function Header() {
                       "text-neutral-900/90",
                       "shadow-none",
                       "hover:bg-white/60",
+                      "outline-none focus:outline-none focus-visible:outline-none",
                     ].join(" ")}
                   >
                     {item.label}
@@ -190,6 +190,7 @@ export default function Header() {
                 target="_blank"
                 rel="noreferrer"
                 className="mt-3 inline-flex w-full items-center justify-center rounded-full bg-neutral-900/85 px-4 py-3 text-sm font-medium text-white hover:bg-neutral-900/95"
+                style={{ WebkitTapHighlightColor: "transparent" }}
               >
                 予約する
               </a>

@@ -21,7 +21,7 @@ const serif = Noto_Serif_JP({
 export const metadata: Metadata = {
   title: "25salon｜守口・大日",
   description:
-    "大阪府守口市・大日エリアの住宅地にある隠れ家トータルサロン。ジェルネイル（ハンド・フット）、フェイシャル、ボディケア、耳ツボなど。",
+    "大阪大日・守口エリアの住宅地にある隠れ家トータルサロン。ジェルネイル（ハンド・フット）、フェイシャル、ボディケア、耳ツボなど。",
 };
 
 export default function RootLayout({

@@ -81,11 +81,11 @@ function HeroSecondaryButton({ href }: { href: string }) {
       href={href}
       className={[
         "inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-semibold",
-        "text-white/90 hover:text-white",
-        "ring-1 ring-white/35 bg-white/10",
+        "text-white/92 hover:text-white",
+        "ring-1 ring-white/30 bg-white/10",
         "backdrop-blur-sm",
       ].join(" ")}
-      style={{ textShadow: "0 2px 10px rgba(0,0,0,0.35)" }}
+      style={{ textShadow: "0 2px 10px rgba(0,0,0,0.45)" }}
     >
       メニュー／料金
     </a>
@@ -130,26 +130,34 @@ function ScrollIndicator({
     <a
       href={href}
       aria-label={label}
+      // 位置：もっと下（スマホUIと被りにくいギリギリ）
       className="group absolute bottom-1 left-1/2 -translate-x-1/2 rounded-full px-6 py-4"
     >
+      {/* label：見やすさ最優先で小さいプレートを敷く */}
       <span
         className={[
-          "block text-[11px] font-semibold tracking-[0.26em]",
+          "mx-auto inline-flex items-center justify-center",
+          "rounded-full px-3 py-1.5",
+          "text-[11px] font-semibold tracking-[0.26em]",
           "text-[rgb(var(--accent))]",
-          "drop-shadow-[0_2px_14px_rgba(0,0,0,0.55)]",
+          "bg-black/18",
+          "backdrop-blur-sm",
+          "shadow-[0_10px_26px_-18px_rgba(0,0,0,0.75)]",
         ].join(" ")}
       >
         {label}
       </span>
 
+      {/* line */}
       <span
-        className="mx-auto mt-2 block h-10 w-px rounded-full"
+        className="mx-auto mt-2 block h-8 w-px rounded-full"
         style={{
           background:
-            "linear-gradient(180deg, rgba(255,255,255,0.00), rgba(var(--accent),0.70), rgba(255,255,255,0.00))",
+            "linear-gradient(180deg, rgba(255,255,255,0.00), rgba(var(--accent),0.78), rgba(255,255,255,0.00))",
         }}
       />
 
+      {/* chevron */}
       <span
         className="mx-auto mt-2 block h-5 w-5"
         style={{ animation: "floatYSoft 1.9s ease-in-out infinite" }}
@@ -164,14 +172,6 @@ function ScrollIndicator({
           />
         </svg>
       </span>
-
-      <span
-        className="pointer-events-none absolute inset-0 rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-        style={{
-          background:
-            "radial-gradient(closest-side, rgba(0,0,0,0.16), rgba(0,0,0,0.00))",
-        }}
-      />
     </a>
   );
 }
@@ -197,19 +197,25 @@ export default function HomePage() {
           <div className="relative">
             <HeroSlider slides={slides} holdMs={holdMs} fadeMs={fadeMs} overlay={0.38} />
 
-            {/* 読みやすさ用ベール（左上〜中央だけ効かせる） */}
+            {/* 読みやすさ用ベール（弱め） */}
             <div
-  className="pointer-events-none absolute inset-0"
-  style={{
-    background:
-      "radial-gradient(760px 460px at 12% 18%, rgba(0,0,0,0.30), rgba(0,0,0,0.12) 42%, rgba(0,0,0,0.00) 64%)",
-  }}
-/>
+              className="pointer-events-none absolute inset-0"
+              style={{
+                background:
+                  "radial-gradient(760px 460px at 12% 18%, rgba(0,0,0,0.30), rgba(0,0,0,0.12) 42%, rgba(0,0,0,0.00) 64%)",
+              }}
+            />
 
             <div className="absolute inset-x-0 top-0 p-5 md:p-10">
+              {/* スマホで1行に収める：文字小さく＋nowrap＋溢れは省略 */}
               <p
-                className="text-xs font-medium tracking-[0.22em] text-white/90"
+                className={[
+                  "max-w-full",
+                  "text-[11px] font-medium tracking-[0.18em] text-white/90",
+                  "whitespace-nowrap overflow-hidden text-ellipsis",
+                ].join(" ")}
                 style={{ textShadow: "0 2px 12px rgba(0,0,0,0.55)" }}
+                title={`${siteConfig.area}｜完全予約制`}
               >
                 {siteConfig.area}｜完全予約制
               </p>

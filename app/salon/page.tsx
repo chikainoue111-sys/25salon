@@ -6,7 +6,7 @@ export default function SalonPage() {
       <PageHeader
         eyebrow="About"
         title="サロン紹介"
-        description="大阪府守口市・大日エリアの住宅地にある隠れ家トータルサロン。年齢やお悩みに合わせて、ネイル・肌・体のケアを丁寧にご提案します。"
+        description="大阪大日・守口エリアの住宅地にある隠れ家トータルサロン。年齢やお悩みに合わせて、ネイル・肌・体のケアを丁寧にご提案します。"
       />
 
       <div className="grid gap-4 md:grid-cols-2">

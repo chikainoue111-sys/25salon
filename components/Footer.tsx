@@ -16,7 +16,7 @@ export default function Footer() {
               {siteConfig.name}
             </p>
             <p className="mt-2 text-sm text-neutral-700/80">
-              大阪府守口市・大日エリアの住宅地にある、完全予約制の隠れ家トータルサロン。
+              大阪大日・守口エリアの住宅地にある、完全予約制の隠れ家トータルサロン。
             </p>
           </div>
 
