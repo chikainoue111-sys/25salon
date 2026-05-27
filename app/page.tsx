@@ -40,6 +40,58 @@ function Price({ children }: { children: React.ReactNode }) {
   );
 }
 
+/** ヒーロー内だけ用：横長にならないボタン */
+function HeroPrimaryButton({ href }: { href: string }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      className={[
+        "group relative isolate inline-flex items-center justify-center",
+        "rounded-full px-5 py-3 text-sm font-semibold",
+        "text-white ring-1 ring-white/15 shadow-lg shadow-black/25",
+        "transform-gpu transition-all duration-300 ease-out",
+        "hover:-translate-y-0.5 hover:scale-[1.02] active:translate-y-0 active:scale-[0.99]",
+      ].join(" ")}
+      style={{
+        background:
+          "linear-gradient(180deg, rgba(var(--accent),0.95) 0%, rgba(var(--accent),0.78) 55%, rgba(var(--accent),0.92) 100%)",
+      }}
+    >
+      <span
+        className={[
+          "pointer-events-none absolute inset-0 -z-10 rounded-full opacity-0",
+          "transition-opacity duration-300 ease-out",
+          "group-hover:opacity-100",
+        ].join(" ")}
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.10) 45%, rgba(255,255,255,0.00) 100%)",
+        }}
+      />
+      ご予約はこちら
+    </a>
+  );
+}
+
+function HeroSecondaryButton({ href }: { href: string }) {
+  return (
+    <a
+      href={href}
+      className={[
+        "inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-semibold",
+        "text-white/90 hover:text-white",
+        "ring-1 ring-white/35 bg-white/10",
+        "backdrop-blur-sm",
+      ].join(" ")}
+      style={{ textShadow: "0 2px 10px rgba(0,0,0,0.35)" }}
+    >
+      メニュー／料金
+    </a>
+  );
+}
+
 function OutlineButton({
   href,
   children,
@@ -67,33 +119,6 @@ function OutlineButton({
   );
 }
 
-function ChipLink({
-  href,
-  children,
-  external,
-}: {
-  href: string;
-  children: React.ReactNode;
-  external?: boolean;
-}) {
-  const cls =
-    "inline-flex items-center justify-center rounded-full border border-white/55 bg-white/25 px-4 py-2 text-xs font-semibold tracking-wide text-neutral-900 backdrop-blur transition hover:bg-white/35";
-
-  if (external) {
-    return (
-      <a href={href} target="_blank" rel="noreferrer" className={cls}>
-        {children}
-      </a>
-    );
-  }
-
-  return (
-    <a href={href} className={cls}>
-      {children}
-    </a>
-  );
-}
-
 function ScrollIndicator({
   href,
   label = "VIEW MORE",
@@ -105,29 +130,26 @@ function ScrollIndicator({
     <a
       href={href}
       aria-label={label}
-      className="group absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full px-6 py-4"
+      className="group absolute bottom-1 left-1/2 -translate-x-1/2 rounded-full px-6 py-4"
     >
-      {/* label: 金色をclassで固定（黒に上書きされないように） */}
       <span
-        className="block text-[11px] font-semibold tracking-[0.26em]"
-        style={{
-          color: "rgba(var(--accent), 0.95)",
-          textShadow: "0 2px 12px rgba(0,0,0,0.45)",
-        }}
+        className={[
+          "block text-[11px] font-semibold tracking-[0.26em]",
+          "text-[rgb(var(--accent))]",
+          "drop-shadow-[0_2px_14px_rgba(0,0,0,0.55)]",
+        ].join(" ")}
       >
         {label}
       </span>
 
-      {/* thin line */}
       <span
         className="mx-auto mt-2 block h-10 w-px rounded-full"
         style={{
           background:
-            "linear-gradient(180deg, rgba(255,255,255,0.00), rgba(var(--accent),0.65), rgba(255,255,255,0.00))",
+            "linear-gradient(180deg, rgba(255,255,255,0.00), rgba(var(--accent),0.70), rgba(255,255,255,0.00))",
         }}
       />
 
-      {/* floating chevron (ここにアニメを確実に付与) */}
       <span
         className="mx-auto mt-2 block h-5 w-5"
         style={{ animation: "floatYSoft 1.9s ease-in-out infinite" }}
@@ -135,7 +157,7 @@ function ScrollIndicator({
         <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden="true">
           <path
             d="M6.5 9.5l5.5 5.5 5.5-5.5"
-            stroke="rgba(var(--accent),0.95)"
+            stroke="rgb(var(--accent))"
             strokeWidth="1.8"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -143,12 +165,11 @@ function ScrollIndicator({
         </svg>
       </span>
 
-      {/* hover subtle brighten */}
       <span
         className="pointer-events-none absolute inset-0 rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         style={{
           background:
-            "radial-gradient(closest-side, rgba(255,255,255,0.12), rgba(255,255,255,0.00))",
+            "radial-gradient(closest-side, rgba(0,0,0,0.16), rgba(0,0,0,0.00))",
         }}
       />
     </a>
@@ -158,7 +179,7 @@ function ScrollIndicator({
 export default function HomePage() {
   const isMobile = useIsMobile();
 
-  // 早すぎ → 倍に（ゆっくり）
+  // 早すぎ → 倍（ゆっくり）
   const holdMs = 10666;
   const fadeMs = 5600;
 
@@ -176,17 +197,26 @@ export default function HomePage() {
           <div className="relative">
             <HeroSlider slides={slides} holdMs={holdMs} fadeMs={fadeMs} overlay={0.38} />
 
+            {/* 読みやすさ用ベール（左上〜中央だけ効かせる） */}
+            <div
+  className="pointer-events-none absolute inset-0"
+  style={{
+    background:
+      "radial-gradient(760px 460px at 12% 18%, rgba(0,0,0,0.30), rgba(0,0,0,0.12) 42%, rgba(0,0,0,0.00) 64%)",
+  }}
+/>
+
             <div className="absolute inset-x-0 top-0 p-5 md:p-10">
               <p
-                className="text-xs font-medium tracking-[0.22em] text-white/85"
-                style={{ textShadow: "0 2px 10px rgba(0,0,0,0.35)" }}
+                className="text-xs font-medium tracking-[0.22em] text-white/90"
+                style={{ textShadow: "0 2px 12px rgba(0,0,0,0.55)" }}
               >
                 {siteConfig.area}｜完全予約制
               </p>
 
               <h1
                 className="mt-3 font-serif text-4xl font-semibold leading-[1.05] text-white md:text-6xl"
-                style={{ textShadow: "0 10px 28px rgba(0,0,0,0.35)" }}
+                style={{ textShadow: "0 12px 30px rgba(0,0,0,0.55)" }}
               >
                 25salon
               </h1>
@@ -194,66 +224,19 @@ export default function HomePage() {
               <div className="mt-3" />
 
               <p
-                className="mt-3 max-w-xl text-sm leading-7 text-white/90 md:text-base"
-                style={{ textShadow: "0 2px 12px rgba(0,0,0,0.35)" }}
+                className="mt-3 max-w-xl text-sm leading-7 text-white/95 md:text-base"
+                style={{ textShadow: "0 2px 14px rgba(0,0,0,0.55)" }}
               >
                 静かに整う、プライベートトータルサロン。
               </p>
 
-              {/* 小さな導線（スマホでも自然） */}
-              <div className="mt-5 flex flex-wrap gap-2">
-                <ChipLink href="#about">サロンについて</ChipLink>
-                <ChipLink href="#menu">メニュー</ChipLink>
-                <ChipLink href={siteConfig.reservationUrl} external>
-                  予約
-                </ChipLink>
-                <ChipLink href="#info">店舗情報</ChipLink>
-              </div>
-
-              {/* デカいボタンは sm以上だけ */}
-              <div className="mt-5 hidden sm:flex flex-col gap-3 sm:flex-row sm:items-center">
-                <a
-                  href={siteConfig.reservationUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className={[
-                    "group relative isolate inline-flex items-center justify-center rounded-full px-7 py-3.5 text-sm font-semibold",
-                    "min-w-[176px]",
-                    "text-white ring-1 ring-white/15 shadow-lg shadow-black/20",
-                    "transform-gpu transition-all duration-300 ease-out",
-                    "hover:-translate-y-1 hover:scale-[1.03] active:translate-y-0 active:scale-[0.99]",
-                    "hover:brightness-[1.08] hover:saturate-[1.05]",
-                    "hover:shadow-xl hover:shadow-black/35",
-                  ].join(" ")}
-                  style={{
-                    background:
-                      "linear-gradient(180deg, rgba(var(--accent),0.95) 0%, rgba(var(--accent),0.78) 55%, rgba(var(--accent),0.92) 100%)",
-                  }}
-                >
-                  <span
-                    className={[
-                      "pointer-events-none absolute inset-0 -z-10 rounded-full opacity-0",
-                      "transition-opacity duration-300 ease-out",
-                      "group-hover:opacity-100",
-                    ].join(" ")}
-                    style={{
-                      background:
-                        "linear-gradient(180deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.10) 45%, rgba(255,255,255,0.00) 100%)",
-                    }}
-                  />
-                  ご予約はこちら
-                </a>
-
-                <a
-                  href="#menu"
-                  className="inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-medium text-white/85 hover:text-white/95"
-                >
-                  メニュー／料金
-                </a>
+              {/* ボタン：短く、左端で横並び（狭い時は折り返し） */}
+              <div className="mt-5 flex flex-wrap items-center justify-start gap-3">
+                <HeroPrimaryButton href={siteConfig.reservationUrl} />
+                <HeroSecondaryButton href="#menu" />
               </div>
             </div>
 
-            {/* 上品ゴールドの誘導 */}
             <ScrollIndicator href="#about" label={isMobile ? "VIEW MORE" : "VIEW MORE"} />
           </div>
         </div>
